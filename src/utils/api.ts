@@ -13,7 +13,16 @@ export const api = {
             throw error;
         }
 
-        return data || [];
+        // Map snake_case from DB to camelCase for frontend
+        return (data || []).map(row => ({
+            id: row.id,
+            date: row.date,
+            type: row.type,
+            category: row.category,
+            amount: row.amount,
+            paymentMethod: row.payment_method,
+            notes: row.notes,
+        }));
     },
 
     async addTransaction(transaction: Omit<Transaction, 'id'>): Promise<Transaction> {
@@ -35,7 +44,6 @@ export const api = {
             throw error;
         }
 
-        // Map snake_case from DB to camelCase for frontend
         return {
             id: data.id,
             date: data.date,
@@ -67,7 +75,6 @@ export const api = {
             throw error;
         }
 
-        // Map snake_case from DB to camelCase for frontend
         return {
             id: data.id,
             date: data.date,
@@ -80,6 +87,8 @@ export const api = {
     },
 
     async deleteTransaction(id: string): Promise<void> {
+        console.log('Deleting transaction with ID:', id);
+
         const { error } = await supabase
             .from('transactions')
             .delete()
@@ -89,5 +98,7 @@ export const api = {
             console.error('Error deleting transaction:', error);
             throw error;
         }
+
+        console.log('Transaction deleted successfully');
     },
 };

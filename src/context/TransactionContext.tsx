@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { ReactNode } from 'react';
 import type { Transaction, DailySummary, MonthlySummary } from '../types';
 import { api } from '../utils/api';
-import { format, isSameDay, parseISO } from 'date-fns';
+import { format } from 'date-fns';
 
 interface TransactionContextType {
     transactions: Transaction[];
@@ -17,7 +17,6 @@ const TransactionContext = createContext<TransactionContextType | undefined>(und
 
 export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [isLoading, setIsLoading] = useState(true);
 
     const fetchTransactions = async () => {
@@ -65,7 +64,8 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
     };
 
     const getDailySummary = (date: Date): DailySummary => {
-        const dailyTransactions = transactions.filter((t) => isSameDay(parseISO(t.date), date));
+        const targetDate = format(date, 'yyyy-MM-dd');
+        const dailyTransactions = transactions.filter((t) => t.date.startsWith(targetDate));
 
         const totalIncome = dailyTransactions
             .filter((t) => t.type === 'income')
@@ -84,27 +84,27 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
     };
 
     const getMonthlySummary = (date: Date): MonthlySummary => {
-        // Calculate billing cycle from 8th of previous month to 8th of current month
+        // Calculate billing cycle from 8th to 8th
         const currentDay = date.getDate();
 
-        // Determine the billing cycle start and end dates
         let cycleStartDate: Date;
         let cycleEndDate: Date;
 
         if (currentDay >= 8) {
-            // If today is 8th or later, cycle is from 8th of this month to 8th of next month
             cycleStartDate = new Date(date.getFullYear(), date.getMonth(), 8);
             cycleEndDate = new Date(date.getFullYear(), date.getMonth() + 1, 8);
         } else {
-            // If today is before 8th, cycle is from 8th of previous month to 8th of this month
             cycleStartDate = new Date(date.getFullYear(), date.getMonth() - 1, 8);
             cycleEndDate = new Date(date.getFullYear(), date.getMonth(), 8);
         }
 
-        // Filter transactions within the billing cycle
+        // Filter transactions within the billing cycle using date strings
+        const cycleStart = format(cycleStartDate, 'yyyy-MM-dd');
+        const cycleEnd = format(cycleEndDate, 'yyyy-MM-dd');
+
         const monthlyTransactions = transactions.filter((t) => {
-            const transactionDate = parseISO(t.date);
-            return transactionDate >= cycleStartDate && transactionDate < cycleEndDate;
+            const transactionDate = t.date.split('T')[0];
+            return transactionDate >= cycleStart && transactionDate < cycleEnd;
         });
 
         const totalIncome = monthlyTransactions
