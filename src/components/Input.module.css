@@ -1,0 +1,28 @@
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+}
+
+.label {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+    font-weight: 500;
+}
+
+.input {
+    width: 100%;
+}
+
+.inputError {
+    border-color: var(--color-danger);
+}
+
+.inputError:focus {
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.error {
+    font-size: 0.75rem;
+    color: var(--color-danger);
+}

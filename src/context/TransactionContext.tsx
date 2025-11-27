@@ -1,0 +1,171 @@
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
+import type { Transaction, DailySummary, MonthlySummary } from '../types';
+import { api } from '../utils/api';
+import { format, isSameDay, parseISO } from 'date-fns';
+
+interface TransactionContextType {
+    transactions: Transaction[];
+    addTransaction: (transaction: Omit<Transaction, 'id'>) => Promise<void>;
+    editTransaction: (id: string, updatedTransaction: Partial<Transaction>) => Promise<void>;
+    deleteTransaction: (id: string) => Promise<void>;
+    getDailySummary: (date: Date) => DailySummary;
+    getMonthlySummary: (date: Date) => MonthlySummary;
+}
+
+const TransactionContext = createContext<TransactionContextType | undefined>(undefined);
+
+export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [isLoading, setIsLoading] = useState(true);
+
+    const fetchTransactions = async () => {
+        try {
+            const data = await api.getTransactions();
+            setTransactions(data);
+        } catch (error) {
+            console.error('Error fetching transactions:', error);
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchTransactions();
+    }, []);
+
+    const addTransaction = async (transaction: Omit<Transaction, 'id'>) => {
+        try {
+            const newTransaction = await api.addTransaction(transaction);
+            setTransactions((prev) => [newTransaction, ...prev]);
+        } catch (error) {
+            console.error('Error adding transaction:', error);
+        }
+    };
+
+    const editTransaction = async (id: string, updatedTransaction: Partial<Transaction>) => {
+        try {
+            const updated = await api.updateTransaction(id, updatedTransaction);
+            setTransactions((prev) =>
+                prev.map((t) => (t.id === id ? updated : t))
+            );
+        } catch (error) {
+            console.error('Error updating transaction:', error);
+        }
+    };
+
+    const deleteTransaction = async (id: string) => {
+        try {
+            await api.deleteTransaction(id);
+            setTransactions((prev) => prev.filter((t) => t.id !== id));
+        } catch (error) {
+            console.error('Error deleting transaction:', error);
+        }
+    };
+
+    const getDailySummary = (date: Date): DailySummary => {
+        const dailyTransactions = transactions.filter((t) => isSameDay(parseISO(t.date), date));
+
+        const totalIncome = dailyTransactions
+            .filter((t) => t.type === 'income')
+            .reduce((sum, t) => Number(sum) + Number(t.amount), 0);
+
+        const totalExpenses = dailyTransactions
+            .filter((t) => t.type === 'expense')
+            .reduce((sum, t) => Number(sum) + Number(t.amount), 0);
+
+        return {
+            date: date.toISOString(),
+            totalIncome,
+            totalExpenses,
+            transactions: dailyTransactions,
+        };
+    };
+
+    const getMonthlySummary = (date: Date): MonthlySummary => {
+        // Calculate billing cycle from 8th of previous month to 8th of current month
+        const currentDay = date.getDate();
+
+        // Determine the billing cycle start and end dates
+        let cycleStartDate: Date;
+        let cycleEndDate: Date;
+
+        if (currentDay >= 8) {
+            // If today is 8th or later, cycle is from 8th of this month to 8th of next month
+            cycleStartDate = new Date(date.getFullYear(), date.getMonth(), 8);
+            cycleEndDate = new Date(date.getFullYear(), date.getMonth() + 1, 8);
+        } else {
+            // If today is before 8th, cycle is from 8th of previous month to 8th of this month
+            cycleStartDate = new Date(date.getFullYear(), date.getMonth() - 1, 8);
+            cycleEndDate = new Date(date.getFullYear(), date.getMonth(), 8);
+        }
+
+        // Filter transactions within the billing cycle
+        const monthlyTransactions = transactions.filter((t) => {
+            const transactionDate = parseISO(t.date);
+            return transactionDate >= cycleStartDate && transactionDate < cycleEndDate;
+        });
+
+        const totalIncome = monthlyTransactions
+            .filter((t) => t.type === 'income')
+            .reduce((sum, t) => Number(sum) + Number(t.amount), 0);
+
+        const totalExpenses = monthlyTransactions
+            .filter((t) => t.type === 'expense')
+            .reduce((sum, t) => Number(sum) + Number(t.amount), 0);
+
+        const totalTaxes = monthlyTransactions
+            .filter((t) => t.type === 'tax')
+            .reduce((sum, t) => Number(sum) + Number(t.amount), 0);
+
+        const totalSavings = monthlyTransactions
+            .filter((t) => t.type === 'savings')
+            .reduce((sum, t) => Number(sum) + Number(t.amount), 0);
+
+        const totalDonations = monthlyTransactions
+            .filter((t) => t.type === 'donation')
+            .reduce((sum, t) => Number(sum) + Number(t.amount), 0);
+
+        const totalCreditPayments = monthlyTransactions
+            .filter((t) => t.type === 'credit_payment')
+            .reduce((sum, t) => Number(sum) + Number(t.amount), 0);
+
+        const balance = totalIncome - totalExpenses - totalTaxes - totalSavings - totalDonations;
+
+        return {
+            month: format(cycleStartDate, 'MMM d') + ' - ' + format(cycleEndDate, 'MMM d, yyyy'),
+            totalIncome,
+            totalExpenses,
+            totalTaxes,
+            totalSavings,
+            totalDonations,
+            totalCreditPayments,
+            netCashFlow: balance,
+            balance,
+        };
+    };
+
+    return (
+        <TransactionContext.Provider
+            value={{
+                transactions,
+                addTransaction,
+                editTransaction,
+                deleteTransaction,
+                getDailySummary,
+                getMonthlySummary,
+            }}
+        >
+            {children}
+        </TransactionContext.Provider>
+    );
+};
+
+export const useTransactions = () => {
+    const context = useContext(TransactionContext);
+    if (context === undefined) {
+        throw new Error('useTransactions must be used within a TransactionProvider');
+    }
+    return context;
+};
