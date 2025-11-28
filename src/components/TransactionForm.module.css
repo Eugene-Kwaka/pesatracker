@@ -6,7 +6,31 @@
 
 .actions {
     display: flex;
-    justify-content: flex-end;
     gap: var(--spacing-md);
-    margin-top: var(--spacing-md);
+    justify-content: flex-end;
+    margin-top: var(--spacing-lg);
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .form {
+        gap: var(--spacing-md);
+    }
+
+    .row {
+        flex-direction: column;
+    }
+
+    .formGroup {
+        width: 100%;
+    }
+
+    .actions {
+        flex-direction: column-reverse;
+        gap: var(--spacing-sm);
+    }
+
+    .actions button {
+        width: 100%;
+    }
 }

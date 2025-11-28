@@ -23,22 +23,6 @@
 }
 
 .chartCard {
-    background-color: var(--color-bg-card);
-    border-radius: var(--radius-lg);
-    padding: var(--spacing-lg);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.chartTitle {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin-bottom: var(--spacing-md);
-    color: var(--color-text-main);
-}
-
-.noData {
-    text-align: center;
-    color: var(--color-text-muted);
     padding: var(--spacing-xl);
 }
 

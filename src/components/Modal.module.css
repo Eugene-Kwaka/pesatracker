@@ -80,3 +80,27 @@
         transform: translateY(0);
     }
 }
+
+/* Mobile */
+@media (max-width: 768px) {
+    .modal {
+        width: 95%;
+        max-width: none;
+        padding: var(--spacing-lg);
+    }
+
+    .title {
+        font-size: 1.25rem;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .modal {
+        padding: var(--spacing-md);
+    }
+
+    .title {
+        font-size: 1.125rem;
+    }
+}

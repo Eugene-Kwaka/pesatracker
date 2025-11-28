@@ -322,6 +322,201 @@ td.expense {
 
 .deleteMessage {
     text-align: center;
+    transition: all var(--transition-fast);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.actionBtn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-main);
+}
+
+.container {
+    background-color: var(--color-bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    overflow: hidden;
+}
+
+.filters {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.filterGroup {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.filterIcon {
+    color: var(--color-text-muted);
+}
+
+.filterSelect,
+.filterDate {
+    width: auto;
+    min-width: 150px;
+}
+
+.tableWrapper {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.875rem;
+}
+
+.table th {
+    text-align: left;
+    padding: var(--spacing-md);
+    color: var(--color-text-muted);
+    font-weight: 500;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.table td {
+    padding: var(--spacing-md);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--color-text-main);
+}
+
+.table tr:last-child td {
+    border-bottom: none;
+}
+
+.table tr:hover {
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.badge {
+    padding: 2px 8px;
+    border-radius: var(--radius-full);
+    font-size: 0.75rem;
+    font-weight: 500;
+    text-transform: capitalize;
+}
+
+.income {
+    color: var(--color-success);
+    background-color: rgba(16, 185, 129, 0.1);
+}
+
+.expense {
+    color: var(--color-text-main);
+}
+
+.badge.expense {
+    color: var(--color-danger);
+    background-color: rgba(239, 68, 68, 0.1);
+}
+
+.badge.tax {
+    color: var(--color-warning);
+    background-color: rgba(245, 158, 11, 0.1);
+}
+
+.badge.savings {
+    color: var(--color-info);
+    background-color: rgba(59, 130, 246, 0.1);
+}
+
+.badge.donation {
+    color: var(--color-secondary);
+    background-color: rgba(112, 0, 255, 0.1);
+}
+
+.badge.credit_payment {
+    color: var(--color-text-muted);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+td.income {
+    color: var(--color-success);
+    font-weight: 600;
+}
+
+td.expense {
+    color: var(--color-text-main);
+    font-weight: 600;
+}
+
+.notes {
+    max-width: 200px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: var(--color-text-muted);
+}
+
+.actions {
+    display: flex;
+    gap: var(--spacing-sm);
+}
+
+.actionBtn {
+    padding: 6px;
+    border-radius: var(--radius-sm);
+    color: var(--color-text-muted);
+    transition: all var(--transition-fast);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.actionBtn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--color-text-main);
+}
+
+.delete:hover {
+    background-color: rgba(239, 68, 68, 0.2);
+    color: var(--color-danger);
+}
+
+.empty {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--color-text-muted);
+}
+
+.deleteModal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-md);
+}
+
+.deleteIcon {
+    color: var(--color-danger);
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.6;
+    }
+}
+
+.deleteMessage {
+    text-align: center;
     color: var(--color-text-main);
     font-size: 1rem;
     line-height: 1.5;
@@ -333,4 +528,90 @@ td.expense {
     width: 100%;
     justify-content: center;
     margin-top: var(--spacing-md);
+}
+
+/* Tablet */
+@media (max-width: 1024px) {
+    .filterGroup {
+        flex-wrap: wrap;
+    }
+
+    .table {
+        font-size: 0.8125rem;
+    }
+
+    .table th,
+    .table td {
+        padding: var(--spacing-sm);
+    }
+
+    .notes {
+        max-width: 150px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .filterGroup {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filterSelect,
+    .filterDate {
+        width: 100%;
+        min-width: unset;
+    }
+
+    .tableWrapper {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table {
+        font-size: 0.75rem;
+        min-width: 600px;
+    }
+
+    .table th,
+    .table td {
+        padding: var(--spacing-xs);
+    }
+
+    .notes {
+        max-width: 100px;
+    }
+
+    .actionBtn {
+        padding: 4px;
+    }
+
+    .deleteModal {
+        padding: var(--spacing-sm);
+    }
+
+    .deleteIcon svg {
+        width: 36px;
+        height: 36px;
+    }
+
+    .deleteMessage {
+        font-size: 0.875rem;
+    }
+
+    .deleteActions {
+        flex-direction: column;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .table {
+        font-size: 0.6875rem;
+    }
+
+    .badge {
+        font-size: 0.625rem;
+        padding: 1px 6px;
+    }
 }
