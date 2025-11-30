@@ -26,6 +26,13 @@ export const api = {
     },
 
     async addTransaction(transaction: Omit<Transaction, 'id'>): Promise<Transaction> {
+        // Get current user
+        const { data: { user } } = await supabase.auth.getUser();
+
+        if (!user) {
+            throw new Error('User not authenticated');
+        }
+
         const { data, error } = await supabase
             .from('transactions')
             .insert([{
@@ -35,6 +42,7 @@ export const api = {
                 amount: transaction.amount,
                 payment_method: transaction.paymentMethod,
                 notes: transaction.notes,
+                user_id: user.id,
             }])
             .select()
             .single();

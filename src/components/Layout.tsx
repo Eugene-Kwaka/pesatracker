@@ -1,15 +1,16 @@
 import React, { ReactNode } from 'react';
 import styles from './Layout.module.css';
-import { LayoutDashboard, PlusCircle, PieChart, Settings } from 'lucide-react';
+import { LayoutDashboard, PlusCircle, PieChart, Settings, LogOut } from 'lucide-react';
 import clsx from 'clsx';
 
 interface LayoutProps {
     children: ReactNode;
     activeTab?: 'dashboard' | 'analytics' | 'settings';
     onTabChange?: (tab: 'dashboard' | 'analytics' | 'settings') => void;
+    onSignOut?: () => void;
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children, activeTab = 'dashboard', onTabChange }) => {
+export const Layout: React.FC<LayoutProps> = ({ children, activeTab = 'dashboard', onTabChange, onSignOut }) => {
     return (
         <div className={styles.container}>
             <aside className={styles.sidebar}>
@@ -44,6 +45,13 @@ export const Layout: React.FC<LayoutProps> = ({ children, activeTab = 'dashboard
                         Settings
                     </button>
                 </nav>
+
+                {onSignOut && (
+                    <button className={styles.signOutBtn} onClick={onSignOut}>
+                        <LogOut size={20} />
+                        Sign Out
+                    </button>
+                )}
             </aside>
 
             <main className={styles.main}>
