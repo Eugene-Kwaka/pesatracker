@@ -34,10 +34,19 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
         fetchTransactions();
     }, []);
 
+    // Helper function to sort transactions by date in descending order
+    const sortTransactions = (transactions: Transaction[]): Transaction[] => {
+        return [...transactions].sort((a, b) => {
+            const dateA = new Date(a.date).getTime();
+            const dateB = new Date(b.date).getTime();
+            return dateB - dateA; // Descending order (newest first)
+        });
+    };
+
     const addTransaction = async (transaction: Omit<Transaction, 'id'>) => {
         try {
             const newTransaction = await api.addTransaction(transaction);
-            setTransactions((prev) => [newTransaction, ...prev]);
+            setTransactions((prev) => sortTransactions([newTransaction, ...prev]));
         } catch (error) {
             console.error('Error adding transaction:', error);
         }
@@ -47,7 +56,7 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
         try {
             const updated = await api.updateTransaction(id, updatedTransaction);
             setTransactions((prev) =>
-                prev.map((t) => (t.id === id ? updated : t))
+                sortTransactions(prev.map((t) => (t.id === id ? updated : t)))
             );
         } catch (error) {
             console.error('Error updating transaction:', error);

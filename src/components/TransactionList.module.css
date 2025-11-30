@@ -26,342 +26,38 @@
     min-width: 150px;
 }
 
-.tableWrapper {
-    overflow-x: auto;
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
-}
-
-.table th {
-    text-align: left;
+/* Summary Section */
+.summary {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
     padding: var(--spacing-md);
-    color: var(--color-text-muted);
-    font-weight: 500;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.table td {
-    padding: var(--spacing-md);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    color: var(--color-text-main);
-}
-
-.table tr:last-child td {
-    border-bottom: none;
-}
-
-.table tr:hover {
     background-color: rgba(255, 255, 255, 0.02);
-}
-
-.badge {
-    padding: 2px 8px;
-    border-radius: var(--radius-full);
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: capitalize;
-}
-
-.income {
-    color: var(--color-success);
-    background-color: rgba(16, 185, 129, 0.1);
-}
-
-.expense {
-    color: var(--color-text-main);
-}
-
-.badge.expense {
-    color: var(--color-danger);
-    background-color: rgba(239, 68, 68, 0.1);
-}
-
-.badge.tax {
-    color: var(--color-warning);
-    background-color: rgba(245, 158, 11, 0.1);
-}
-
-.badge.savings {
-    color: var(--color-info);
-    background-color: rgba(59, 130, 246, 0.1);
-}
-
-.badge.donation {
-    color: var(--color-secondary);
-    background-color: rgba(112, 0, 255, 0.1);
-}
-
-.badge.credit_payment {
-    color: var(--color-text-muted);
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-td.income {
-    color: var(--color-success);
-    font-weight: 600;
-}
-
-td.expense {
-    color: var(--color-text-main);
-    font-weight: 600;
-}
-
-.notes {
-    max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: var(--color-text-muted);
-}
-
-.actions {
-    display: flex;
-    gap: var(--spacing-sm);
-}
-
-.actionBtn {
-    padding: 6px;
-    border-radius: var(--radius-sm);
-    color: var(--color-text-muted);
-    transition: all var(--transition-fast);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.actionBtn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--color-text-main);
-}
-
-.container {
-    background-color: var(--color-bg-card);
-    border-radius: var(--radius-lg);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    overflow: hidden;
-}
-
-.filters {
-    padding: var(--spacing-md);
     border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    gap: var(--spacing-lg);
 }
 
-.filterGroup {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-}
-
-.filterIcon {
-    color: var(--color-text-muted);
-}
-
-.filterSelect,
-.filterDate {
-    width: auto;
-    min-width: 150px;
-}
-
-.tableWrapper {
-    overflow-x: auto;
-}
-
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.875rem;
-}
-
-.table th {
-    text-align: left;
-    padding: var(--spacing-md);
-    color: var(--color-text-muted);
-    font-weight: 500;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.table td {
-    padding: var(--spacing-md);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    color: var(--color-text-main);
-}
-
-.table tr:last-child td {
-    border-bottom: none;
-}
-
-.table tr:hover {
-    background-color: rgba(255, 255, 255, 0.02);
-}
-
-.badge {
-    padding: 2px 8px;
-    border-radius: var(--radius-full);
-    font-size: 0.75rem;
-    font-weight: 500;
-    text-transform: capitalize;
-}
-
-.income {
-    color: var(--color-success);
-    background-color: rgba(16, 185, 129, 0.1);
-}
-
-.expense {
-    color: var(--color-text-main);
-}
-
-.badge.expense {
-    color: var(--color-danger);
-    background-color: rgba(239, 68, 68, 0.1);
-}
-
-.badge.tax {
-    color: var(--color-warning);
-    background-color: rgba(245, 158, 11, 0.1);
-}
-
-.badge.savings {
-    color: var(--color-info);
-    background-color: rgba(59, 130, 246, 0.1);
-}
-
-.badge.donation {
-    color: var(--color-secondary);
-    background-color: rgba(112, 0, 255, 0.1);
-}
-
-.badge.credit_payment {
-    color: var(--color-text-muted);
-    background-color: rgba(255, 255, 255, 0.1);
-}
-
-td.income {
-    color: var(--color-success);
-    font-weight: 600;
-}
-
-td.expense {
-    color: var(--color-text-main);
-    font-weight: 600;
-}
-
-.notes {
-    max-width: 200px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    color: var(--color-text-muted);
-}
-
-.actions {
-    display: flex;
-    gap: var(--spacing-sm);
-}
-
-.actionBtn {
-    padding: 6px;
-    border-radius: var(--radius-sm);
-    color: var(--color-text-muted);
-    transition: all var(--transition-fast);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.actionBtn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--color-text-main);
-}
-
-.delete:hover {
-    background-color: rgba(239, 68, 68, 0.2);
-    color: var(--color-danger);
-}
-
-.empty {
-    text-align: center;
-    padding: var(--spacing-xl);
-    color: var(--color-text-muted);
-}
-
-.deleteModal {
+.summaryItem {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--spacing-lg);
-    padding: var(--spacing-md);
+    gap: var(--spacing-xs);
 }
 
-.deleteIcon {
-    color: var(--color-danger);
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.6;
-    }
-}
-
-.deleteMessage {
-    text-align: center;
-    transition: all var(--transition-fast);
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.actionBtn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--color-text-main);
-}
-
-.container {
-    background-color: var(--color-bg-card);
-    border-radius: var(--radius-lg);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    overflow: hidden;
-}
-
-.filters {
-    padding: var(--spacing-md);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.filterGroup {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-md);
-}
-
-.filterIcon {
+.summaryLabel {
+    font-size: 0.75rem;
     color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.filterSelect,
-.filterDate {
-    width: auto;
-    min-width: 150px;
+.summaryValue {
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+.summaryTotal {
+    font-size: 1.5rem;
 }
 
 .tableWrapper {
@@ -488,6 +184,64 @@ td.expense {
     text-align: center;
     padding: var(--spacing-xl);
     color: var(--color-text-muted);
+}
+
+/* Pagination */
+.pagination {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-md);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    gap: var(--spacing-md);
+}
+
+.paginationInfo {
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+}
+
+.paginationControls {
+    display: flex;
+    gap: var(--spacing-xs);
+    align-items: center;
+}
+
+.paginationBtn {
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    background-color: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--color-text-main);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+}
+
+.paginationBtn:hover:not(:disabled) {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.paginationBtn.active {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: white;
+}
+
+.paginationBtn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.paginationEllipsis {
+    padding: 6px 8px;
+    color: var(--color-text-muted);
+    font-size: 0.875rem;
 }
 
 .deleteModal {
@@ -563,6 +317,19 @@ td.expense {
         min-width: unset;
     }
 
+    .summary {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+
+    .summaryValue {
+        font-size: 1.125rem;
+    }
+
+    .summaryTotal {
+        font-size: 1.25rem;
+    }
+
     .tableWrapper {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
@@ -584,6 +351,22 @@ td.expense {
 
     .actionBtn {
         padding: 4px;
+    }
+
+    .pagination {
+        flex-direction: column;
+        gap: var(--spacing-sm);
+    }
+
+    .paginationControls {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .paginationBtn {
+        padding: 4px 8px;
+        min-width: 32px;
+        font-size: 0.8125rem;
     }
 
     .deleteModal {

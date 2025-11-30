@@ -20,9 +20,20 @@ const TRANSACTION_TYPES: { value: TransactionType; label: string }[] = [
     { value: 'credit_payment', label: 'Credit Card Payment' },
 ];
 
-const PAYMENT_METHODS: { value: PaymentMethod; label: string }[] = [
+const EXPENSE_PAYMENT_METHODS: { value: PaymentMethod; label: string }[] = [
     { value: 'credit_card', label: 'Credit Card' },
     { value: 'debit_card', label: 'Debit Card' },
+    { value: 'cash', label: 'Cash' },
+];
+
+const DONATION_PAYMENT_METHODS: { value: PaymentMethod; label: string }[] = [
+    { value: 'debit_card', label: 'Debit Card' },
+    { value: 'cash', label: 'Cash' },
+];
+
+const INCOME_PAYMENT_METHODS: { value: PaymentMethod; label: string }[] = [
+    { value: 'online_payment', label: 'Online Payment' },
+    { value: 'check', label: 'Check' },
     { value: 'cash', label: 'Cash' },
 ];
 
@@ -31,6 +42,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ initialData, o
     const [type, setType] = useState<TransactionType>('expense');
     const [category, setCategory] = useState('');
     const [amount, setAmount] = useState('');
+    const [displayAmount, setDisplayAmount] = useState('0.00');
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('credit_card');
     const [notes, setNotes] = useState('');
 
@@ -38,24 +50,81 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ initialData, o
         if (initialData) {
             setDate(initialData.date.split('T')[0]);
             setType(initialData.type);
-            setCategory(initialData.category);
-            setAmount(initialData.amount.toString());
+            setCategory(initialData.category || '');
+            const amountValue = initialData.amount.toString();
+            setAmount(amountValue);
+            setDisplayAmount(parseFloat(amountValue).toFixed(2));
             if (initialData.paymentMethod) setPaymentMethod(initialData.paymentMethod);
             if (initialData.notes) setNotes(initialData.notes);
         }
     }, [initialData]);
 
+    // Update payment method when type changes (only for new transactions, not when editing)
+    useEffect(() => {
+        // Don't auto-set payment method if we're editing an existing transaction
+        if (initialData) return;
+
+        if (type === 'donation') {
+            setPaymentMethod('debit_card');
+        } else if (type === 'income') {
+            setPaymentMethod('online_payment');
+        } else if (type === 'expense') {
+            setPaymentMethod('credit_card');
+        }
+    }, [type, initialData]);
+
+    const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const input = e.target.value.replace(/[^\d]/g, ''); // Remove non-digits
+
+        if (input === '') {
+            setAmount('');
+            setDisplayAmount('0.00');
+            return;
+        }
+
+        // Convert cents to dollars
+        const cents = parseInt(input, 10);
+        const dollars = cents / 100;
+
+        setAmount(dollars.toString());
+        setDisplayAmount(dollars.toFixed(2));
+    };
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSubmit({
+
+        const transactionData: Omit<Transaction, 'id'> = {
             date: new Date(date).toISOString(),
             type,
-            category,
-            amount: parseFloat(amount),
-            paymentMethod: type === 'expense' ? paymentMethod : undefined,
+            amount: parseFloat(amount) || 0,
             notes,
-        });
+        };
+
+        // Only include category for types that need it
+        if (type !== 'donation' && type !== 'income') {
+            transactionData.category = category;
+        }
+
+        // Include payment method for expense, donation, and income
+        if (type === 'expense' || type === 'donation' || type === 'income') {
+            transactionData.paymentMethod = paymentMethod;
+        }
+
+        onSubmit(transactionData);
     };
+
+    // Determine which payment methods to show
+    const getPaymentMethods = () => {
+        if (type === 'donation') return DONATION_PAYMENT_METHODS;
+        if (type === 'income') return INCOME_PAYMENT_METHODS;
+        return EXPENSE_PAYMENT_METHODS;
+    };
+
+    // Determine if category should be shown
+    const showCategory = type !== 'donation' && type !== 'income';
+
+    // Determine if payment method should be shown
+    const showPaymentMethod = type === 'expense' || type === 'donation' || type === 'income';
 
     return (
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -74,30 +143,31 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ initialData, o
                 options={TRANSACTION_TYPES}
             />
 
-            <Input
-                label="Category"
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                placeholder="e.g., Groceries, Salary, Rent"
-                required
-            />
+            {showCategory && (
+                <Input
+                    label="Category"
+                    value={category}
+                    onChange={(e) => setCategory(e.target.value)}
+                    placeholder="e.g., Groceries, Salary, Rent"
+                    required
+                />
+            )}
 
             <Input
                 label="Amount"
-                type="number"
-                step="0.01"
-                value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                type="text"
+                value={displayAmount}
+                onChange={handleAmountChange}
                 placeholder="0.00"
                 required
             />
 
-            {type === 'expense' && (
+            {showPaymentMethod && (
                 <Select
                     label="Payment Method"
                     value={paymentMethod}
                     onChange={(e) => setPaymentMethod(e.target.value as PaymentMethod)}
-                    options={PAYMENT_METHODS}
+                    options={getPaymentMethods()}
                 />
             )}
 

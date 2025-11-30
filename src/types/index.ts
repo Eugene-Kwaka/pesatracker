@@ -1,13 +1,13 @@
 export type TransactionType = 'income' | 'expense' | 'tax' | 'savings' | 'donation' | 'credit_payment';
-export type PaymentMethod = 'credit_card' | 'debit_card' | 'cash';
+export type PaymentMethod = 'credit_card' | 'debit_card' | 'cash' | 'online_payment' | 'check';
 
 export interface Transaction {
     id: string;
     date: string; // ISO string
     type: TransactionType;
-    category: string;
+    category?: string; // Optional - not used for donations and income
     amount: number;
-    paymentMethod?: PaymentMethod; // Only for expenses
+    paymentMethod?: PaymentMethod; // For expenses, donations, and income
     notes?: string;
 }
 

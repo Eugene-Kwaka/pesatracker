@@ -31,7 +31,7 @@ export const api = {
             .insert([{
                 date: transaction.date,
                 type: transaction.type,
-                category: transaction.category,
+                ...(transaction.category && { category: transaction.category }),
                 amount: transaction.amount,
                 payment_method: transaction.paymentMethod,
                 notes: transaction.notes,
@@ -56,16 +56,18 @@ export const api = {
     },
 
     async updateTransaction(id: string, updates: Partial<Transaction>): Promise<Transaction> {
+        const updateData: any = {};
+
+        if (updates.date) updateData.date = updates.date;
+        if (updates.type) updateData.type = updates.type;
+        if (updates.category !== undefined) updateData.category = updates.category;
+        if (updates.amount !== undefined) updateData.amount = updates.amount;
+        if (updates.paymentMethod !== undefined) updateData.payment_method = updates.paymentMethod;
+        if (updates.notes !== undefined) updateData.notes = updates.notes;
+
         const { data, error } = await supabase
             .from('transactions')
-            .update({
-                ...(updates.date && { date: updates.date }),
-                ...(updates.type && { type: updates.type }),
-                ...(updates.category && { category: updates.category }),
-                ...(updates.amount !== undefined && { amount: updates.amount }),
-                ...(updates.paymentMethod !== undefined && { payment_method: updates.paymentMethod }),
-                ...(updates.notes !== undefined && { notes: updates.notes }),
-            })
+            .update(updateData)
             .eq('id', id)
             .select()
             .single();
