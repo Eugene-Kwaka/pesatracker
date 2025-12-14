@@ -64,14 +64,18 @@ export const api = {
     },
 
     async updateTransaction(id: string, updates: Partial<Transaction>): Promise<Transaction> {
+        console.log('Updating transaction:', id, 'with data:', updates);
+
         const updateData: any = {};
 
-        if (updates.date) updateData.date = updates.date;
-        if (updates.type) updateData.type = updates.type;
-        if (updates.category !== undefined) updateData.category = updates.category;
+        if (updates.date !== undefined) updateData.date = updates.date;
+        if (updates.type !== undefined) updateData.type = updates.type;
+        if (updates.category !== undefined) updateData.category = updates.category || null;
         if (updates.amount !== undefined) updateData.amount = updates.amount;
-        if (updates.paymentMethod !== undefined) updateData.payment_method = updates.paymentMethod;
-        if (updates.notes !== undefined) updateData.notes = updates.notes;
+        if (updates.paymentMethod !== undefined) updateData.payment_method = updates.paymentMethod || null;
+        if (updates.notes !== undefined) updateData.notes = updates.notes || null;
+
+        console.log('Sending update to Supabase:', updateData);
 
         const { data, error } = await supabase
             .from('transactions')
@@ -84,6 +88,8 @@ export const api = {
             console.error('Error updating transaction:', error);
             throw error;
         }
+
+        console.log('Transaction updated successfully:', data);
 
         return {
             id: data.id,

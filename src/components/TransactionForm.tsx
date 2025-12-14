@@ -16,7 +16,7 @@ const TRANSACTION_TYPES: { value: TransactionType; label: string }[] = [
     { value: 'expense', label: 'Expense' },
     { value: 'tax', label: 'Tax' },
     { value: 'savings', label: 'Savings' },
-    { value: 'donation', label: 'Donation' },
+    { value: 'remittance', label: 'Remittance' },
     { value: 'credit_payment', label: 'Credit Card Payment' },
 ];
 
@@ -26,7 +26,7 @@ const EXPENSE_PAYMENT_METHODS: { value: PaymentMethod; label: string }[] = [
     { value: 'cash', label: 'Cash' },
 ];
 
-const DONATION_PAYMENT_METHODS: { value: PaymentMethod; label: string }[] = [
+const REMITTANCE_PAYMENT_METHODS: { value: PaymentMethod; label: string }[] = [
     { value: 'debit_card', label: 'Debit Card' },
     { value: 'cash', label: 'Cash' },
 ];
@@ -64,7 +64,7 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ initialData, o
         // Don't auto-set payment method if we're editing an existing transaction
         if (initialData) return;
 
-        if (type === 'donation') {
+        if (type === 'remittance') {
             setPaymentMethod('debit_card');
         } else if (type === 'income') {
             setPaymentMethod('online_payment');
@@ -101,12 +101,12 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ initialData, o
         };
 
         // Only include category for types that need it
-        if (type !== 'donation' && type !== 'income') {
+        if (type !== 'remittance' && type !== 'income') {
             transactionData.category = category;
         }
 
-        // Include payment method for expense, donation, and income
-        if (type === 'expense' || type === 'donation' || type === 'income') {
+        // Include payment method for expense, remittance, and income
+        if (type === 'expense' || type === 'remittance' || type === 'income') {
             transactionData.paymentMethod = paymentMethod;
         }
 
@@ -115,16 +115,16 @@ export const TransactionForm: React.FC<TransactionFormProps> = ({ initialData, o
 
     // Determine which payment methods to show
     const getPaymentMethods = () => {
-        if (type === 'donation') return DONATION_PAYMENT_METHODS;
+        if (type === 'remittance') return REMITTANCE_PAYMENT_METHODS;
         if (type === 'income') return INCOME_PAYMENT_METHODS;
         return EXPENSE_PAYMENT_METHODS;
     };
 
     // Determine if category should be shown
-    const showCategory = type !== 'donation' && type !== 'income';
+    const showCategory = type !== 'remittance' && type !== 'income';
 
     // Determine if payment method should be shown
-    const showPaymentMethod = type === 'expense' || type === 'donation' || type === 'income';
+    const showPaymentMethod = type === 'expense' || type === 'remittance' || type === 'income';
 
     return (
         <form onSubmit={handleSubmit} className={styles.form}>

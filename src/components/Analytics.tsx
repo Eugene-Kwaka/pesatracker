@@ -59,8 +59,8 @@ export const Analytics: React.FC = () => {
             amount: transactions.filter(t => t.type === 'savings').reduce((sum, t) => sum + Number(t.amount), 0)
         },
         {
-            name: 'Donations',
-            amount: transactions.filter(t => t.type === 'donation').reduce((sum, t) => sum + Number(t.amount), 0)
+            name: 'Remittances',
+            amount: transactions.filter(t => t.type === 'remittance').reduce((sum, t) => sum + Number(t.amount), 0)
         },
     ].filter(item => item.amount > 0);
 

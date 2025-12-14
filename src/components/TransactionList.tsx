@@ -47,7 +47,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({ onEdit }) => {
             .reduce((sum, t) => sum + Number(t.amount), 0);
 
         const expenses = filteredTransactions
-            .filter((t) => t.type !== 'income')
+            .filter((t) => t.type === 'expense')
             .reduce((sum, t) => sum + Number(t.amount), 0);
 
         const total = income - expenses;
@@ -138,7 +138,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({ onEdit }) => {
                             { value: 'expense', label: 'Expense' },
                             { value: 'tax', label: 'Tax' },
                             { value: 'savings', label: 'Savings' },
-                            { value: 'donation', label: 'Donation' },
+                            { value: 'remittance', label: 'Remittance' },
                             { value: 'credit_payment', label: 'Credit Payment' },
                         ]}
                         className={styles.filterSelect}

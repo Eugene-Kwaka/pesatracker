@@ -1,13 +1,13 @@
-export type TransactionType = 'income' | 'expense' | 'tax' | 'savings' | 'donation' | 'credit_payment';
+export type TransactionType = 'income' | 'expense' | 'tax' | 'savings' | 'remittance' | 'credit_payment';
 export type PaymentMethod = 'credit_card' | 'debit_card' | 'cash' | 'online_payment' | 'check';
 
 export interface Transaction {
     id: string;
     date: string; // ISO string
     type: TransactionType;
-    category?: string; // Optional - not used for donations and income
+    category?: string; // Optional - not used for remittances and income
     amount: number;
-    paymentMethod?: PaymentMethod; // For expenses, donations, and income
+    paymentMethod?: PaymentMethod; // For expenses, remittances, and income
     notes?: string;
 }
 
@@ -24,7 +24,7 @@ export interface MonthlySummary {
     totalExpenses: number;
     totalTaxes: number;
     totalSavings: number;
-    totalDonations: number;
+    totalRemittances: number;
     totalCreditPayments: number;
     netCashFlow: number;
     balance: number;

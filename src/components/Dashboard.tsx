@@ -56,9 +56,11 @@ export const Dashboard: React.FC = () => {
                 </div>
             </header>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1.5rem', marginBottom: '2rem' }}>
                 <Card title="Total Income (This Month)" value={`$${monthlySummary.totalIncome.toFixed(2)}`} />
                 <Card title="Total Expenses (This Month)" value={`$${monthlySummary.totalExpenses.toFixed(2)}`} />
+                <Card title="Total Savings (This Month)" value={`$${monthlySummary.totalSavings.toFixed(2)}`} />
+                <Card title="Total Taxes (This Month)" value={`$${monthlySummary.totalTaxes.toFixed(2)}`} />
                 <Card title="Monthly Balance" value={`$${monthlySummary.balance.toFixed(2)}`} trend={monthlySummary.balance >= 0 ? 'up' : 'down'} trendValue="Net" />
             </div>
 

@@ -132,15 +132,15 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
             .filter((t) => t.type === 'savings')
             .reduce((sum, t) => Number(sum) + Number(t.amount), 0);
 
-        const totalDonations = monthlyTransactions
-            .filter((t) => t.type === 'donation')
+        const totalRemittances = monthlyTransactions
+            .filter((t) => t.type === 'remittance')
             .reduce((sum, t) => Number(sum) + Number(t.amount), 0);
 
         const totalCreditPayments = monthlyTransactions
             .filter((t) => t.type === 'credit_payment')
             .reduce((sum, t) => Number(sum) + Number(t.amount), 0);
 
-        const balance = totalIncome - totalExpenses - totalTaxes - totalSavings - totalDonations;
+        const balance = totalIncome - totalExpenses - totalTaxes - totalSavings - totalRemittances;
 
         return {
             month: format(cycleStartDate, 'MMM d') + ' - ' + format(cycleEndDate, 'MMM d, yyyy'),
@@ -148,7 +148,7 @@ export const TransactionProvider: React.FC<{ children: ReactNode }> = ({ childre
             totalExpenses,
             totalTaxes,
             totalSavings,
-            totalDonations,
+            totalRemittances,
             totalCreditPayments,
             netCashFlow: balance,
             balance,
